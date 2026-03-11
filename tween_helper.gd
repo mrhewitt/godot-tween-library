@@ -55,6 +55,17 @@ static func fadeout( target: CanvasItem, fade_time: float, start_delay: float = 
 	return fadeout_tween( create_tween(target), target, fade_time, start_delay )
 	
 
+## Creates a pop out effect
+## [param scale_factor] is amount by which default scale is adjusted
+## [param duration] Total duration of the effect
+static func pop( target: CanvasItem, scale_factor: float = 1.3, duration: float = 0.3):
+	return pop_tween( create_tween(target), target, scale_factor, duration )
+
+
+static func bounce( target: CanvasItem, height: int = 10, duration: float = 0.3, loop: bool = false) -> Tween:
+	return bounce_tween( create_tween(target), target, height, duration, loop)
+	
+
 #endregion
 
 #region Tweener Versions
@@ -73,5 +84,25 @@ static func fadeout_tween( tween: Tween, target: CanvasItem, fade_time: float, s
 	# caller does not have to manage module property
 	tween.tween_property(target, "modulate:a", 1.0, 0)
 	return tween
+
+
+## Creates a pop out effect
+## [param scale_factor] is amount by which default scale is adjusted
+## [param duration] Total duration of the effect
+static func pop_tween( tween: Tween, target: CanvasItem, scale_factor: float = 1.3, duration: float = 0.3) -> Tween:
+	var original_scale = target.scale
+	tween.tween_property(target, "scale", original_scale * scale_factor, duration/2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(target, "scale", original_scale, duration/2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	return tween
+	
+
+static func bounce_tween( tween: Tween, target: CanvasItem, height: int = 10, duration: float = 0.3, loop: bool = false) -> Tween:
+	var default_y: int = target.position.y
+	if loop:
+		tween.set_loops()
+	tween.tween_property(target, "position:y", default_y - height, duration / 2)
+	tween.tween_property(target, "position:y", default_y, duration / 2)
+	return tween
+
 
 #endregion
