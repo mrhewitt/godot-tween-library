@@ -62,9 +62,20 @@ static func pop( target: CanvasItem, scale_factor: float = 1.3, duration: float 
 	return pop_tween( create_tween(target), target, scale_factor, duration )
 
 
+## Creates a little hop effect
+## [param height] Number of pixels to jump up by
+## [param duration] Total time, goes up in half duration, back down in same
+## [param loops] Set to true to have the motion repeated forever
 static func bounce( target: CanvasItem, height: int = 10, duration: float = 0.3, loop: bool = false) -> Tween:
 	return bounce_tween( create_tween(target), target, height, duration, loop)
 	
+
+## Animate a property on a shader material in the target node[br]
+## [i]Assumes animation will be applied to target.material[/i]
+## [param property] is name of actual shader parameter, e.g. progress
+static func tween_shader_property( target: CanvasItem, property: String, final_value, duration: float ) -> Tween:
+	return tween_shader_property_tween( create_tween(target), target, property, final_value, duration )
+
 
 #endregion
 
@@ -96,6 +107,10 @@ static func pop_tween( tween: Tween, target: CanvasItem, scale_factor: float = 1
 	return tween
 	
 
+## Creates a little hop effect
+## [param height] Number of pixels to jump up by
+## [param duration] Total time, goes up in half duration, back down in same
+## [param loops] Set to true to have the motion repeated forever
 static func bounce_tween( tween: Tween, target: CanvasItem, height: int = 10, duration: float = 0.3, loop: bool = false) -> Tween:
 	var default_y: int = target.position.y
 	if loop:
@@ -105,4 +120,12 @@ static func bounce_tween( tween: Tween, target: CanvasItem, height: int = 10, du
 	return tween
 
 
+## Animate a property on a shader material in the target node[br]
+## [i]Assumes animation will be applied to target.material[/i]
+## [param property] is name of actual shader parameter, e.g. progress
+static func tween_shader_property_tween( tween: Tween, target: CanvasItem, property: String, final_value, duration: float ) -> Tween:
+	tween.tween_property(target.material, "shader_parameter/" + property, final_value, duration)
+	return tween
+	
+	
 #endregion
