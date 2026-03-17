@@ -31,7 +31,6 @@ class_name TweenHelper extends RefCounted
 
 #region Support methods
 
-
 ## Returns true if the target is a valid node
 static func is_valid_target( target: CanvasItem ) -> bool:
 	return target and is_instance_valid(target)
@@ -40,8 +39,16 @@ static func is_valid_target( target: CanvasItem ) -> bool:
 ## Create and return a new tweener, null if target is not valid
 static func create_tween( target: CanvasItem ) -> Tween:
 	return target.create_tween() if is_valid_target(target) else null
-	
-	
+		
+
+## Center the given Cpntrol pivot point[br]
+## [color=RED]Works only for Control nodes![/color]
+## [i]Tweens using scaling/reotation/etc all require pivot point to be centrol[br]
+## unless you are going for an unusual effect[/i]
+## [color=YELLOW]Note pivot points are NOT automatically centered by tween methods[/color]
+static func set_pivot_center( target: Control ) -> void:
+	target.pivot_offset = target.size / 2.0
+
 #endregion
 
 #region Main Tweener Animations
@@ -77,6 +84,11 @@ static func tween_shader_property( target: CanvasItem, property: String, final_v
 	return tween_shader_property_tween( create_tween(target), target, property, final_value, duration )
 
 
+## Animate a pulsing effect, usually on buttons etc that scale in and out
+## [param duration] Length of entire effect
+static func pulse( target: CanvasItem, scale_by: float = 1.3, duration: float = 0.2) -> Tween:
+	return pulse_tween( create_tween(target), target, scale_by, duration )
+	
 #endregion
 
 #region Tweener Versions
@@ -125,6 +137,15 @@ static func bounce_tween( tween: Tween, target: CanvasItem, height: int = 10, du
 ## [param property] is name of actual shader parameter, e.g. progress
 static func tween_shader_property_tween( tween: Tween, target: CanvasItem, property: String, final_value, duration: float ) -> Tween:
 	tween.tween_property(target.material, "shader_parameter/" + property, final_value, duration)
+	return tween
+	
+	
+## Animate a pulsing effect, usually on buttons etc that scale in and out
+## [param duration] Length of entire effect
+static func pulse_tween( tween: Tween, target: CanvasItem, scale_by: float = 1.3, duration: float = 2.0) -> Tween:
+	tween.set_loops()
+	tween.tween_property( target, "scale", target.scale * scale_by, duration/2.0 )
+	tween.tween_property( target, "scale", target.scale, duration/2.0 )
 	return tween
 	
 	
