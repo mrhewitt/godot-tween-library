@@ -86,7 +86,7 @@ static func tween_shader_property( target: CanvasItem, property: String, final_v
 
 ## Animate a pulsing effect, usually on buttons etc that scale in and out
 ## [param duration] Length of entire effect
-static func pulse( target: CanvasItem, scale_by: float = 1.3, duration: float = 0.2) -> Tween:
+static func pulse( target: CanvasItem, scale_by: float = 1.1, duration: float = 1) -> Tween:
 	return pulse_tween( create_tween(target), target, scale_by, duration )
 	
 #endregion
@@ -142,7 +142,7 @@ static func tween_shader_property_tween( tween: Tween, target: CanvasItem, prope
 	
 ## Animate a pulsing effect, usually on buttons etc that scale in and out
 ## [param duration] Length of entire effect
-static func pulse_tween( tween: Tween, target: CanvasItem, scale_by: float = 1.3, duration: float = 2.0) -> Tween:
+static func pulse_tween( tween: Tween, target: CanvasItem, scale_by: float = 1.1, duration: float = 8.0) -> Tween:
 	tween.set_loops()
 	tween.tween_property( target, "scale", target.scale * scale_by, duration/2.0 )
 	tween.tween_property( target, "scale", target.scale, duration/2.0 )
